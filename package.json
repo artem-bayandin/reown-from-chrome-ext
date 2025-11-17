@@ -1,0 +1,16 @@
+{
+  "name": "reown-from-chrome-ext",
+  "version": "1.0.0",
+  "description": "A sample chrome extension to demonstrate how to use Reown Appkit to read/write data from/to smart contracts",
+  "license": "MIT",
+  "author": "Artem Bayandin",
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "hardhat": "^2.27.0"
+  },
+  "scripts": {
+    "hcf": "hardhat compile --force"
+  }
+}
