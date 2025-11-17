@@ -1,0 +1,21 @@
+
+{
+  "manifest_version": 3,
+  "name": "Reown within Chrome extension sample",
+  "version": "0.0.1",
+  "description": "",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [],
+  "host_permissions": [],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["index.html", "*.js", "*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
