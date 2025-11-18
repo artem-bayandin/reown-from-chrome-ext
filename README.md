@@ -22,14 +22,18 @@ The app is a POC sample of how to use reown appkit inside a chrome extension. As
 
 #### Case 3:
 
-- when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
+- when switching network, it always shows `Your connected wallet may not support some of the networks available for this dApp`, although network id changes. Networks I try to change are added into Metamask wallet in browser extension as well as in iPhone Metamask app (from which I scan QR code to connect)
 
 #### Case 4:
+
+- when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
+
+#### Case 5:
 
 - cannot write to smart contract (all transactions fail with `Failed to load resource: the server responded with a status of 400`). The next request fails (some codes are replaced with 0):
 `GET https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000`
 
-#### Case5 (fantom bug):
+#### Case 6 (fantom bug):
 
 Open extension, connect wallet, read balance, read value from smart contract - works fine.
 Close extension, open extension (you will see that you are connected), click to read value from smart contract - error:
