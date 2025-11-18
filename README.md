@@ -4,39 +4,58 @@
 
 The app is a POC sample of how to use reown appkit inside a chrome extension. As a smart contract, a very simple contract with internal counter was deployed and veified to Amoy testnet at `0x669AdfAbFd880A86c042B14bCb16De193a91e2bc` ([amoy scan](https://amoy.polygonscan.com/address/0x669AdfAbFd880A86c042B14bCb16De193a91e2bc)). [Faucet link](https://faucet.stakepool.dev.br/amoy).
 
+Prerequisites: hardhat needs keys, there are keys for localhost, and for Amoy network HH reads the key from .keys.json (which is not available) - you may copy-paste .keys.example.json or manually add a private key to hardhat.config.ts.
+
+You also need some test tokens - visit faucet https://faucet.stakepool.dev.br/amoy 
+
+Metamask extension 13.8.0 is used in browser
+
+Link to reown bug: https://github.com/reown-com/appkit/issues/5359
+
 ### Current state:
 
-- connects using QR code;
+- connects using QR code scanned from iPhone Metamask app;
 - reads balance (using inbuilt appkit functionality);
 - reads from smart contract (reads counter).
 
-### Does not work:
+### Issues:
 
-#### Case 1 (critical):
+#### Case 1 (critical): Writing to smart contract
 
-- cannot write to smart contract (all transactions fail with `Failed to load resource: the server responded with a status of 400`). The next request fails (some codes are replaced with 0):
+- steps: Open the extension, connect your wallet, click "read balance" to see it somehow works, click "read counter" to see it reads from smart contract, then click "increment" or "decrement".
+- actual: Nothing will happen, and in console you will see a 400 BadRequest error `GET https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000`
+- expected: Metamask extension opens to sign a transaction (or at least a QR code appears to scan from mobile)
 `GET https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000`
 
-#### Case 2 (high priority):
+#### Case 2 (high priority): Whitelisting `chrome-extension://{EXT_ID}` origin in Reown dashboard
 
-- cannot add chrome extension origin `chrome-extension://iflfpafchabnngjeanbgjnapfahmglme` to the list of allowed origins on reown dashboard - throws `Please enter a valid domain or URL`. I'd like to add my extension to limit calls only from it. If `google.com` is added, then appkit says that my orign `chrome-extension://...` is not added, and I have to whitelist it.
+- I'd like to limit usage of my project_id just to my extension;
+- steps: go to Reown dashboard https://dashboard.reown.com/ , navigate to Domains, click to add a domain, insert `chrome-extension://iflfpafchabnngjeanbgjnapfahmglme`
+- actual: Error: `Please enter a valid domain or URL`
+- expected: origin added
 
-#### Case 3 (high priority):
+#### Case 3 (high priority): Connect to Metamask extension as well as using QR code for mobile Metamask app
 
-- cannot connect using Metamask extension in browser. When selecting "browser" version instead of "QR code" shows "Not detected". I'd like to let users to connect using their browser extensions, as my app is an extension.
+- working in a browser, I'd like it to be browser-first, with no need to use mobile Metamask app to connect to my extension
+- steps: Open my extension, click Connect button, select Metamask wallet, toggle "browser" instead of "QR code"
+- actual: Error: `Not detected`
+- expected: Metamask browser extension is triggered/opened
 
-#### Case 4 (mid priority):
+#### Case 4 (mid priority): Switching networks
 
-- when switching network, it always shows `Your connected wallet may not support some of the networks available for this dApp`, although network id changes. Networks I try to change are added into Metamask wallet in browser extension as well as in iPhone Metamask app (from which I scan QR code to connect)
+- prerequisites: both Polygon and Amoy networks are added to both Metamask browser extension and Metamask iPhone app
+- steps: Open my extension, connect, click "Network" button, select Polygon or Amoy (both predefined)
+- actual: Seems that network is switched, at least ID of current network changes, but there is an error on UI: `Your connected wallet may not support some of the networks available for this dApp`
+- expected: Network is switched with no such error
 
-#### Case 5 (low priority):
+#### Case 5 (low priority): Some errors in console, might be related to signing transactions
 
 - when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
 
-#### Case 6 (fantom bug) (low priority):
+#### Case 6 (fantom bug) (low priority): Unable to read from smart contract (failed to find stable reproducable logic). Might be some cache mechanism failure or so.
 
-Open extension, connect wallet, read balance, read value from smart contract - works fine.
-Close extension, open extension (you will see that you are connected), click to read value from smart contract - error:
+- Open extension, connect wallet, read balance, read value from smart contract - works fine.
+- Close extension, open extension (you will see that you are connected), click to read value from smart contract - error:
 ```
 {
     "code": "BAD_DATA",
@@ -49,7 +68,7 @@ Close extension, open extension (you will see that you are connected), click to 
 }
 ```
 
-Expected to see the value from smart contract.
+- Expected to see the value from smart contract.
 
 - Sometimes, it reads the data.
 - Disconnect, and then connect, not closing the extension - sometimes it fails.
