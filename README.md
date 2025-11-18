@@ -12,28 +12,28 @@ The app is a POC sample of how to use reown appkit inside a chrome extension. As
 
 ### Does not work:
 
-#### Case 1:
-
-- cannot add chrome extension origin `chrome-extension://iflfpafchabnngjeanbgjnapfahmglme` to the list of allowed origins on reown dashboard - throws `Please enter a valid domain or URL`
-
-#### Case 2:
-
-- cannot connect using Metamask extension in browser. When selecting "browser" version instead of "QR code" shows "Not detected";
-
-#### Case 3:
-
-- when switching network, it always shows `Your connected wallet may not support some of the networks available for this dApp`, although network id changes. Networks I try to change are added into Metamask wallet in browser extension as well as in iPhone Metamask app (from which I scan QR code to connect)
-
-#### Case 4:
-
-- when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
-
-#### Case 5:
+#### Case 1 (critical):
 
 - cannot write to smart contract (all transactions fail with `Failed to load resource: the server responded with a status of 400`). The next request fails (some codes are replaced with 0):
 `GET https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000`
 
-#### Case 6 (fantom bug):
+#### Case 2 (high priority):
+
+- cannot add chrome extension origin `chrome-extension://iflfpafchabnngjeanbgjnapfahmglme` to the list of allowed origins on reown dashboard - throws `Please enter a valid domain or URL`. I'd like to add my extension to limit calls only from it. If `google.com` is added, then appkit says that my orign `chrome-extension://...` is not added, and I have to whitelist it.
+
+#### Case 3 (high priority):
+
+- cannot connect using Metamask extension in browser. When selecting "browser" version instead of "QR code" shows "Not detected". I'd like to let users to connect using their browser extensions, as my app is an extension.
+
+#### Case 4 (mid priority):
+
+- when switching network, it always shows `Your connected wallet may not support some of the networks available for this dApp`, although network id changes. Networks I try to change are added into Metamask wallet in browser extension as well as in iPhone Metamask app (from which I scan QR code to connect)
+
+#### Case 5 (low priority):
+
+- when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
+
+#### Case 6 (fantom bug) (low priority):
 
 Open extension, connect wallet, read balance, read value from smart contract - works fine.
 Close extension, open extension (you will see that you are connected), click to read value from smart contract - error:
