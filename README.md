@@ -67,6 +67,11 @@ The project consists of two parts:
    - script to deploy, read, write: `./scripts-hh/do.ts`. To run it: `npx hardhat run scripts-hh/do.ts --network NETWORK_NAME`, where `NETWORK_NAME` currently might be `localhost` or `amoy`, as configured in `./hardhat.config.ts`
 4. now you may reference `TestCounter` smart contract from UI referencing folder `/sol/hardhat/artifacts` or `types`
 
+There are 3 smart contracts deployed on Amoy for you:
+- `0x669AdfAbFd880A86c042B14bCb16De193a91e2bc` (verified),
+- `0x4Dc134793D7987a1bbD948804529AeCAF7c197C6` (verified),
+- `0xA7971197438fC51177440345e9A6Dad5b37BBA49` (not verified). Although it seems that contract verification does not matter.
+
 ### Setup UI
 
 00. you need metamask app installed on your phone, as reown does not connects from extension to extension
