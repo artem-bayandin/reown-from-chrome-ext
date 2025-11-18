@@ -4,16 +4,35 @@
 
 The app is a POC sample of how to use reown appkit inside a chrome extension. As a smart contract, a very simple contract with internal counter was deployed and veified to Amoy testnet at `0x669AdfAbFd880A86c042B14bCb16De193a91e2bc` ([amoy scan](https://amoy.polygonscan.com/address/0x669AdfAbFd880A86c042B14bCb16De193a91e2bc)). [Faucet link](https://faucet.stakepool.dev.br/amoy).
 
-Current state:
+### Current state:
+
 - connects using QR code;
 - reads balance (using inbuilt appkit functionality);
 - reads from smart contract (reads counter).
 
-Does not work:
+### Does not work:
+
+#### Case 1:
+
+- cannot add chrome extension origin `chrome-extension://iflfpafchabnngjeanbgjnapfahmglme` to the list of allowed origins on reown dashboard - throws `Please enter a valid domain or URL`
+
+#### Case 2:
+
 - cannot connect using Metamask extension in browser. When selecting "browser" version instead of "QR code" shows "Not detected";
+
+#### Case 3:
+
+- when reading from smart contract, it reads the value, but there is an error in console, which shows `400 Bad Request` for this call `POST https://rpc.walletconnect.org/v1/?chainId=eip155%3A80002&projectId=357f587eff1593dd05c9ce099737ab92`with payload `{id: 1, jsonrpc: "2.0", method: "test", params: []}`
+
+#### Case 4:
+
 - cannot write to smart contract (all transactions fail with `Failed to load resource: the server responded with a status of 400`). The next request fails (some codes are replaced with 0):
-https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000
-- for some reason, after the contract was verified on amoyscan, reading value also throws an error: 
+`GET https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce099737ab92&origin=chrome-extension://iflfpafchabnngjeanbgjnapfahmglme&id=2f094c141fbe4bd5d29858506e0c299c00000000000000000000000000000000&decryptedId=c5b3da59cc8700ee36228b29abee243400000000000000000000000000000000`
+
+#### Case5 (fantom bug):
+
+Open extension, connect wallet, read balance, read value from smart contract - works fine.
+Close extension, open extension (you will see that you are connected), click to read value from smart contract - error:
 ```
 {
     "code": "BAD_DATA",
@@ -25,6 +44,13 @@ https://verify.walletconnect.org/v3/attestation?projectId=357f587eff1593dd05c9ce
     "shortMessage": "could not decode result data"
 }
 ```
+
+Expected to see the value from smart contract.
+
+- Sometimes, it reads the data.
+- Disconnect, and then connect, not closing the extension - sometimes it fails.
+- Disconnect, close extension, open extension, connect - sometimes it fails.
+- Disconnect, close extension, reload the extension, open, connect - this always worked.
 
 ## How to
 

@@ -3,7 +3,14 @@ import { abi as TestCounterABI } from '../hardhat//artifacts/contracts/TestCount
 import { TestCounter } from '../hardhat/types/TestCounter'
 import { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers'
 
-// contract at 0x669AdfAbFd880A86c042B14bCb16De193a91e2bc
+/* Contract addresses:
+
+    | is verified | address                                     | value  |
+    | true        | 0x669AdfAbFd880A86c042B14bCb16De193a91e2bc  | 2      |
+    | true        | 0x4Dc134793D7987a1bbD948804529AeCAF7c197C6  | 123457 |
+    | false       | 0xA7971197438fC51177440345e9A6Dad5b37BBA49  | 123456 |
+
+*/
 
 async function main() {
     console.log(`I am a worker!`)
@@ -15,9 +22,9 @@ async function main() {
 
     await readValue(address, signer)
 
-    await increment(address, signer)
+    // await increment(address, signer)
 
-    await readValue(address, signer)
+    // await readValue(address, signer)
 }
 
 async function deploy(): Promise<string> {

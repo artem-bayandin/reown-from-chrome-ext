@@ -163,6 +163,13 @@ export default function Popup() {
       {/* Read Balance */}
       <Balance address={address} isConnected={isConnected} />
 
+      {/* Read Counter */}
+      <ReadCounter 
+        contractAddress={contractAddress}
+        signer={signer}
+        isConnected={isConnected}
+      />
+
       {/* Increment */}
       <Increment 
         contractAddress={contractAddress}
@@ -172,13 +179,6 @@ export default function Popup() {
 
       {/* Decrement */}
       <Decrement 
-        contractAddress={contractAddress}
-        signer={signer}
-        isConnected={isConnected}
-      />
-
-      {/* Read Counter */}
-      <ReadCounter 
         contractAddress={contractAddress}
         signer={signer}
         isConnected={isConnected}
